@@ -25,7 +25,7 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
-### 
+### Assignment
 Before start, you have to install production dependencies with npm: `npm install`.
 
 Consider the following example of a small dataset representing products: 
@@ -37,32 +37,29 @@ Our customer ABC would like to have the products above look like this:
 In order to transform the dataset into the desired format, a dictionary is needed:
 
 Web Engineering Frontend Onsite Day Task Introduction
-Domain Range Stonegrey Dark Grey Midnight Black Black Mystic Silver Silver
-The Domain of a dictionary represents the original value to transform, the Range of a dictionary represents the desired value. If we apply this dictionary to the Color column of the Original Dataset and replace the values by the corresponding Range value in the dictionary, we get the Desired Dataset.
+
+`The Domain of a dictionary represents the original value to transform, the Range of a dictionary represents the desired value. If we apply this dictionary to the Color column of the Original Dataset and replace the values by the corresponding Range value in the dictionary, we get the Desired Dataset.`
 
 A dictionary is said to be consistent, if none of the following problems occur: Duplicate Domains/Ranges: Two rows in the dictionary map to the same value, simply resulting in duplicate content.
 
-Domain Range Stonegrey Dark Grey Stonegrey Dark Grey Caribbean Sea Turqoise
-Forks or Duplicate Domains with different Ranges: Two rows in the dictionary map to different values, resulting in an ambiguous transformation.
-Domain Range Stonegrey Dark Grey Stonegrey Anthracite Midnight Blue Dark Blue
+`Forks or Duplicate Domains with different Ranges: Two rows in the dictionary map to different values, resulting in an ambiguous transformation.`
 
-Cycles: Two or more rows in a dictionary result in cycles, resulting in a never-ending transformation.
-Dictionary Consistency
-Domain Range Stonegrey Dark Grey Dark Grey Stonegrey Midnight Blue Dark Blue
-Chains: A chain structure in the dictionary (a value in Range column also appears in Domain column of another entry), resulting in inconsistent transformation.
-Domain Range Stonegrey Dark Grey Dark Grey Anthracite Midnight Blue Dark Blue
+`Cycles: Two or more rows in a dictionary result in cycles, resulting in a never-ending transformation.`
+
+`Chains: A chain structure in the dictionary (a value in Range column also appears in Domain column of another entry), resulting in inconsistent transformation.`
 
 When using dictionaries for data normalisation or other purposes, all these inconsistencies must not occur, otherwise the result of the transformation is ambiguous or not deﬁned.
 
+### Requirements
 With this introduction and slightly theoretical background in mind, you are now going to create a dictionary management application. 
 
 The application must satisfy the following requirements: 
-Creating and deleting dictionaries 
-Showing available dictionaries in an overview 
-Editing dictionaries (adding, updating and removing rows) 
-Validating the entire dictionary regarding consistency (see above) 
-Validations should be shown as some kind of problem markers next to the offending part of the dictionary. 
-Problem markers have different severities, e.g. a Duplicate Domains/Ranges problem is less severe than a Cycle (in which case you cannot go on processing such a dictionary).
+` - Creating and deleting dictionaries 
+- Showing available dictionaries in an overview 
+- Editing dictionaries (adding, updating and removing rows) 
+- Validating the entire dictionary regarding consistency (see above) 
+- Validations should be shown as some kind of problem markers next to the offending part of the dictionary. 
+- Problem markers have different severities, e.g. a Duplicate Domains/Ranges problem is less severe than a Cycle (in which case you cannot go on processing such a dictionary).`
 
 ### [Live Demo](https://dictionary-react.herokuapp.com/)
 
