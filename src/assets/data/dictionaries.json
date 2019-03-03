@@ -2,13 +2,12 @@
     {
         "_id": "861d4be3-75f7-4879-83cc-50d897bdf43f",
         "name": "Frozen yoghurts",
-        "validation": "true",
+        "validation": null,
         "synonims": [
             {
                 "_id": "86187be3-75f7-4879-83db-50d897bdf43s",
                 "domain": "Stonegrey",
                 "range": "Dark Grey"
-
             },
             {
                 "_id": "86187be3-75f7-4879-83db-50d897bdf43q",
@@ -25,17 +24,21 @@
     {
         "_id": "86187be3-75f7-4879-83db-50d897bdf43f",
         "name": "Cars",
-        "validation": "true",
+        "validation": null,
+        "values": [],
         "synonims": [
             {
+                "_id": "86187be3-75f7-4879-83db-50d867bdf43s",
                 "domain": "Stonegrey",
                 "range": "Dark Grey"
             },
             {
+                "_id": "86187be3-75f7-4879-83db-50d897bdf43q",
                 "domain": "Midnight Black",
                 "range": "Black"
             },
             {
+                "_id": "86187be3-75f7-4879-83db-50d897bdf43s",
                 "domain": "Mystic Silver",
                 "range": "Silver"
             }
@@ -44,7 +47,8 @@
     {
         "_id": "861d4be3-75f7-4879-83db-50d897bdf49u",
         "name": "Cupcakes",
-        "validation": "true",
+        "validation": null,
+        "values": [],
         "synonims": [
             {
                 "domain": "Very green",

@@ -11,8 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Icon from '@material-ui/core/Icon';
 import Input from '@material-ui/core/Input';
-import Button from '@material-ui/core/Button';
-// import TablePagination from '@material-ui/core/TablePagination';
+import TablePagination from '@material-ui/core/TablePagination';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -59,8 +58,10 @@ function DictionaryTable(props) {
     deleteRow,
     onChange,
     keyPress,
-    validate,
-    saveChanges,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    page,
+    rowsPerPage,
   } = props;
 
   return (
@@ -70,8 +71,7 @@ function DictionaryTable(props) {
           <TableRow>
             <CustomTableCell>Domain</CustomTableCell>
             <CustomTableCell align="center">Range</CustomTableCell>
-            <CustomTableCell align="center">Duplicate Domains</CustomTableCell>
-            <CustomTableCell align="center">Duplicate Ranges</CustomTableCell>
+            <CustomTableCell align="center">Duplicates</CustomTableCell>
             <CustomTableCell align="center">Forks</CustomTableCell>
             <CustomTableCell align="center">Cycles</CustomTableCell>
             <CustomTableCell align="center">Chains</CustomTableCell>
@@ -79,35 +79,9 @@ function DictionaryTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow className={classes.row}>
-            <CustomTableCell align="center" colSpan={8}>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                onClick={validate}
-              >
-                Validate
-                <Icon className={classes.rightIcon}>verified_user</Icon>
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                onClick={saveChanges}
-              >
-                Save
-                <Icon className={classes.rightIcon}>save_icon</Icon>
-              </Button>
-            </CustomTableCell>
-          </TableRow>
           {rows &&
             rows.map((row, index) => (
               <TableRow className={classes.row} key={index}>
-                {/*                 <CustomTableCell component="th" scope="row" padding="checkbox">
-                  <Icon className={classes.leftIcon}>edit_icon</Icon>
-                </CustomTableCell> */}
-
                 <CustomTableCell component="th" scope="row">
                   <Input
                     id="domain"
@@ -118,6 +92,7 @@ function DictionaryTable(props) {
                       'aria-label':
                         'The Domain of a dictionary represents the original value to transform.',
                     }}
+                    value={row.domain}
                     onChange={e => onChange(e, row._id)}
                     required
                     type="text"
@@ -136,6 +111,7 @@ function DictionaryTable(props) {
                       'aria-label':
                         'The Range of a dictionary represents the desired value.',
                     }}
+                    value={row.range}
                     onChange={e => onChange(e, row._id)}
                     required
                     type="text"
@@ -144,14 +120,7 @@ function DictionaryTable(props) {
                   />
                 </CustomTableCell>
                 <CustomTableCell align="center">
-                  {!row.isDuplicateDomain ? (
-                    <Icon className={classes.rightIcon}>check</Icon>
-                  ) : (
-                    <Icon className={classes.rightIcon}>close</Icon>
-                  )}
-                </CustomTableCell>
-                <CustomTableCell align="center">
-                  {!row.isDuplicateRange ? (
+                  {!row.isDuplicate ? (
                     <Icon className={classes.rightIcon}>check</Icon>
                   ) : (
                     <Icon className={classes.rightIcon}>close</Icon>
@@ -189,30 +158,25 @@ function DictionaryTable(props) {
                 </CustomTableCell>
               </TableRow>
             ))}
-          {/*         </TableBody>
-      </Table> */}
-          {/*           {emptyRows > 0 && (
-            <TableRow style={{ height: 49 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )} */}
         </TableBody>
       </Table>
-      {/*       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        // count={data.length}
-        // rowsPerPage={rowsPerPage}
-        // page={page}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
-        // onChangePage={this.handleChangePage}
-        // onChangeRowsPerPage={this.handleChangeRowsPerPage}
-      /> */}
+      {
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            'aria-label': 'Previous Page',
+          }}
+          nextIconButtonProps={{
+            'aria-label': 'Next Page',
+          }}
+          onChangePage={() => handleChangePage()}
+          onChangeRowsPerPage={() => handleChangeRowsPerPage()}
+        />
+      }
     </Paper>
   );
 }
@@ -224,7 +188,10 @@ DictionaryTable.propTypes = {
   onChange: PropTypes.func.isRequired,
   keyPress: PropTypes.func.isRequired,
   saveChanges: PropTypes.func.isRequired,
-  validate: PropTypes.func.isRequired,
+  handleChangePage: PropTypes.func,
+  handleChangeRowsPerPage: PropTypes.func,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(DictionaryTable);

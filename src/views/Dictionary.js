@@ -17,14 +17,14 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import Icon from '@material-ui/core/Icon';
+import Tooltip from '@material-ui/core/Tooltip';
 import { mainListItems, secondaryListItems } from '../components/listItems';
-/* import { mainListItems, secondaryListItems } from '../components/listItems'; */
-// import SimpleLineChart from '../components/SimpleLineChart';
-/* import SimpleTable from '../components/Table'; */
 import DictionaryTable from '../components/DictionaryTable';
 import DeleteDialog from '../components/DeleteDialog';
-// import EditDialog from '../components/EditDialog';
-// import NewDomainDialog from '../components/NewDomainDialog';
+import ValidatedDialog from '../components/ValidatedDialog';
+import SaveDialog from '../components/SaveDialog';
+import { validateDictionary, properCase } from '../helpers/validationHelper';
 
 const drawerWidth = 240;
 
@@ -104,14 +104,7 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 2,
   },
   add: {
-    // display: 'flex',
-    // alignItems: 'flex-end',
-    // justifyItems: 'flex-end',
-    // justifyContent: 'flex-end',
-    // marginBottom: theme.spacing.unit * 2,
     position: 'absolute',
-    // marginBottom: 50,
-    // marginRight: 50,
     right: 50,
     bottom: 50,
   },
@@ -123,16 +116,18 @@ const styles = theme => ({
 class Dictionary extends React.Component {
   constructor(props) {
     super(props);
-    // Don't call this.setState() here!
+
     this.state = {
       open: true,
       openDeleteDialog: false,
-      // openEditDialog: false,
-      // openAddDialog: false,
+      openValidatedDialog: false,
+      openSaveDialog: false,
       isEditingItem: null,
       isEditingSynonim: null,
       dictionaryName: '',
       _id: null,
+      page: 0,
+      rowsPerPage: 5,
     };
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
@@ -141,13 +136,16 @@ class Dictionary extends React.Component {
     this.handleValidate = this.handleValidate.bind(this);
     this.handleDeleteDialog = this.handleDeleteDialog.bind(this);
     this.keyPress = this.keyPress.bind(this);
-    // this.handleEditDialog = this.handleEditDialog.bind(this);
+    this.handleValidatedDialog = this.handleValidatedDialog.bind(this);
+    this.handleSaveDialog = this.handleSaveDialog.bind(this);
     this.handleSave = this.handleSave.bind(this);
-    // this.handleEdit = this.handleEdit.bind(this);
+    this.checkValidation = this.checkValidation.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangePage = this.handleChangePage.bind(this);
+    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       match: {
         params: { id },
@@ -163,13 +161,19 @@ class Dictionary extends React.Component {
         localStorage.removeItem('dictionaries');
       }
     } else {
-      // console.log('No data in localStorage');
+      console.log('No data in localStorage');
     }
 
     const dictionary = rows.find(row => row._id === id);
     const { synonims } = dictionary;
-    // console.log('Found dictionary!', dictionary);
-    this.setState({ rows, synonims, _id: id, dictionaryName: dictionary.name });
+
+    await this.setState({
+      rows,
+      synonims,
+      _id: id,
+      dictionaryName: dictionary.name,
+    });
+    await this.handleValidate();
   }
 
   static createData() {
@@ -189,12 +193,11 @@ class Dictionary extends React.Component {
     this.setState({ open: false });
   }
 
-  /*   handleAddDialog() {
+  handleSaveDialog() {
     this.setState({
-      openAddDialog: !this.state.openAddDialog,
-      // dictionaryName: '',
+      openSaveDialog: !this.state.openSaveDialog,
     });
-  } */
+  }
 
   handleDeleteDialog(item) {
     this.setState({
@@ -203,28 +206,24 @@ class Dictionary extends React.Component {
     });
   }
 
-  /*   handleEditDialog() {
+  handleValidatedDialog() {
     this.setState({
-      openEditDialog: !this.state.openEditDialog,
-      isEditingItem: null,
-      // dictionaryName: '',
+      openValidatedDialog: !this.state.openValidatedDialog,
     });
-  } */
+  }
 
   handleChange(e, id) {
     const { synonims } = this.state;
 
     const found = synonims.find(synonim => synonim._id === id);
-    if (e.target.id === 'domain') found.domain = e.target.value;
-    if (e.target.id === 'range') found.range = e.target.value;
+    if (e.target.id === 'domain') found.domain = properCase(e.target.value);
+    if (e.target.id === 'range') found.range = properCase(e.target.value);
+    this.setState({ synonims: [...synonims] });
   }
 
   keyPress(e) {
     if (e.keyCode === 13 && e.target.value) {
-      // console.log('value', e.target.value);
-      this.addSynonim();
-    } else if (e.keyCode === 9) {
-      // console.log('value', e.target.value);
+      this.handleValidate();
     }
   }
 
@@ -232,95 +231,48 @@ class Dictionary extends React.Component {
     const { synonims } = this.state;
     synonims.push(this.constructor.createData());
     await this.setState({ synonims });
-    /*     await localStorage.removeItem('dictionaries');
-    await localStorage.setItem('dictionaries', JSON.stringify(this.state.rows)); */
-    // this.handleAddDialog();
   }
 
   async handleSave() {
-    const { rows, id, synonims } = this.state;
+    const { rows, _id, synonims } = this.state;
+    this.handleValidate();
     const updated = rows.map(dictionary => {
-      if (dictionary._id === id)
+      if (dictionary._id === _id)
         return {
           ...dictionary,
-          dictionary: synonims,
+          synonims: [...synonims],
+          validation: true,
         };
       return dictionary;
     });
-    // console.log('updated', updated);
 
     await this.setState({ rows: updated });
-    // console.log('Saving!', this.state);
+
     await localStorage.removeItem('dictionaries');
     await localStorage.setItem('dictionaries', JSON.stringify(this.state.rows));
   }
 
-  /*   handleEdit(id) {
-    const { rows } = this.state;
+  checkValidation(dictionary) {
+    const validate = dictionary.filter(el => {
+      const { isDuplicate, isFork, isCycle, isChain, domain, range } = el;
+      if (isDuplicate || isFork || isCycle || isChain || !domain || !range)
+        return true;
+      return false;
+    });
+    if (validate.length === 0) {
+      this.addSynonim();
+    } else {
+      this.handleValidatedDialog();
+    }
+  }
 
-    const found = rows.find(row => row.id === id);
-    this.handleEditDialog();
-    this.setState({ isEditingItem: found });
-  } */
-  handleValidate() {
-    // console.log('Validating..', this.state.synonims);
-    // Duplicate Domains / Ranges: Two rows in the dictionary map to the same value, simply resulting in duplicate content.
-    // Forks or Duplicate Domains with different Ranges: Two rows in the dictionary map to different values, resulting in an ambiguous transformation.
-    // Cycles: Two or more rows in a dictionary result in cycles, resulting in a never - ending transformation.
-    // Chains: A chain structure in the dictionary (a value in Range column also appears in Domain column of another entry), resulting in inconsistent transformation.
+  async handleValidate() {
     const { synonims } = this.state;
+    const validatedDictionary = validateDictionary(synonims);
+    // setState is async so we need to wait until the values are populated
+    await this.setState({ synonims: validatedDictionary });
 
-    const checkDuplicate = (array, property, string) => {
-      // const arrayOfProperties = array.map(el => el[property]);
-      // console.log('arrayOfProperties', arrayOfProperties);
-      const isDuplicate = array.some(arrVal => string === arrVal[property]);
-      /*       const isDuplicate = arrayOfProperties.some(
-        (item, idx) => arrayOfProperties.indexOf(item) !== idx
-      ); */
-      // console.log('isDuplicate', isDuplicate);
-      return isDuplicate;
-    };
-    const checkCycle = (array, property, domain) => {
-      // const arrayOfProperties = array.map(el => el[property]);
-      // console.log('arrayOfProperties', arrayOfProperties);
-      const isDuplicate = array.some(arrVal => domain === arrVal[property]);
-      return isDuplicate;
-    };
-    const noDuplicate = synonims.map(synonim => {
-      const { domain } = synonim;
-      const { range } = synonim;
-      const newArr = synonims.filter(el => el !== synonim);
-
-      const isDuplicateDomain = checkDuplicate(newArr, 'domain', domain);
-      if (isDuplicateDomain) return { ...synonim, isDuplicateDomain: true };
-      const isDuplicateRange = checkDuplicate(newArr, 'range', range);
-      if (isDuplicateRange) return { ...synonim, isDuplicateRange: true };
-      return { ...synonim, isDuplicateDomain: false, isDuplicateRange: false };
-    });
-
-    /*     const noDuplicateRanges = noDuplicateDomains.map(synonim => {
-      const { range } = synonim;
-      const newArr = noDuplicateDomains.filter(el => el !== synonim);
-
-      const isDuplicate = checkDuplicate(newArr, 'range', range);
-      if (isDuplicate) return { ...synonim, isDuplicateRange: true };
-      return { ...synonim, isDuplicateRange: false };
-    }); */
-
-    const noCycle = noDuplicate.map(synonim => {
-      const { domain } = synonim;
-      const { range } = synonim;
-      const newArr = noDuplicate.filter(el => el !== synonim);
-
-      const isCycleDomain = checkCycle(newArr, 'range', domain);
-      const isCycleRange = checkCycle(newArr, 'domain', range);
-      if (isCycleDomain) return { ...synonim, isCycle: true };
-      if (isCycleRange) return { ...synonim, isCycle: true };
-      return { ...synonim, isCycle: false };
-    });
-    console.log('noCycle', noCycle);
-
-    this.setState({ synonims: noCycle });
+    await this.checkValidation(this.state.synonims);
   }
 
   async handleDelete() {
@@ -350,19 +302,29 @@ class Dictionary extends React.Component {
     });
     this.handleDeleteDialog(null);
 
-    /* await localStorage.removeItem('dictionaries');
-    await localStorage.setItem('dictionaries', JSON.stringify(this.state.rows)); */
+    await localStorage.removeItem('dictionaries');
+    await localStorage.setItem('dictionaries', JSON.stringify(this.state.rows));
+  }
+
+  handleChangePage(event, page) {
+    this.setState({ page });
+  }
+
+  handleChangeRowsPerPage(event) {
+    this.setState({ page: 0, rowsPerPage: event.target.value });
   }
 
   render() {
     const { classes } = this.props;
     const {
+      rows,
       synonims,
       openDeleteDialog,
+      openValidatedDialog,
+      openSaveDialog,
       dictionaryName,
-      // openEditDialog,
-      // openAddDialog,
-      // isEditingItem,
+      page,
+      rowsPerPage,
     } = this.state;
 
     return (
@@ -372,19 +334,15 @@ class Dictionary extends React.Component {
           handleClose={this.handleDeleteDialog}
           handleDelete={this.handleDelete}
         />
-        {/*         <EditDialog
-          open={openEditDialog}
-          item={isEditingItem}
-          handleClose={this.handleEditDialog}
+        <ValidatedDialog
+          open={openValidatedDialog}
+          handleClose={this.handleValidatedDialog}
+        />
+        <SaveDialog
+          open={openSaveDialog}
+          handleClose={this.handleSaveDialog}
           handleSave={this.handleSave}
-          handleChange={this.handleChange}
-        /> */}
-        {/*         <NewDomainDialog
-          open={openAddDialog}
-          handleClose={this.handleAddDialog}
-          handleSave={this.addDictionary}
-          handleChange={this.handleChange}
-        /> */}
+        />
         <CssBaseline />
         <AppBar
           position="absolute"
@@ -442,7 +400,7 @@ class Dictionary extends React.Component {
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
+          <List>{secondaryListItems(rows)}</List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -464,18 +422,35 @@ class Dictionary extends React.Component {
                 editRow={this.handleEdit}
                 onChange={this.handleChange}
                 keyPress={this.keyPress}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
               />
             ) : null}
           </div>
           <div className={classes.add}>
-            <Fab
-              color="primary"
-              aria-label="Add"
-              className={classes.fab}
-              onClick={this.addSynonim}
-            >
-              <AddIcon />
-            </Fab>
+            <Tooltip title="Save" aria-label="Save">
+              <Fab
+                color="secondary"
+                aria-label="Add"
+                className={classes.fab}
+                onClick={() => this.handleSave()}
+              >
+                <Icon className={classes.rightIcon}>save_icon</Icon>
+              </Fab>
+            </Tooltip>
+
+            <Tooltip title="Add domain/range" aria-label="Add domain/range">
+              <Fab
+                color="primary"
+                aria-label="Add"
+                className={classes.fab}
+                onClick={() => this.handleValidate()}
+              >
+                <AddIcon />
+              </Fab>
+            </Tooltip>
           </div>
         </main>
       </div>

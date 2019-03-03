@@ -4,16 +4,16 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import EditForm from './EditForm';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-function EditDialog(props) {
-  const { open, handleClose, handleSave, item, handleChange } = props;
+function ValidatedDialog(props) {
+  const { open, handleClose } = props;
 
   return (
     <div>
@@ -26,29 +26,26 @@ function EditDialog(props) {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">
-          {'Edit the name for your dictionary:'}
+          {'You cannot enter duplicated/empty values'}
         </DialogTitle>
         <DialogContent>
-          <EditForm item={item} handleChange={handleChange} />
+          <DialogContentText id="alert-dialog-slide-description">
+            To avoid inconsistencies duplication must not occur, otherwise the
+            result of the transformation is ambiguous or not deﬁned.
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSave} color="primary">
-            Save
+            OK
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
 }
-EditDialog.propTypes = {
+ValidatedDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  handleSave: PropTypes.func.isRequired,
-  item: PropTypes.object,
-  handleChange: PropTypes.func.isRequired,
 };
 
-export default EditDialog;
+export default ValidatedDialog;

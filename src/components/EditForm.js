@@ -27,32 +27,6 @@ function EditForm(props) {
           onChange={handleChange}
         />
       ) : null}
-      {/* 
-      <Input
-        placeholder="Placeholder"
-        className={classes.input}
-        inputProps={{
-          'aria-label': 'Description',
-        }}
-      />
-
-      <Input
-        value="Disabled"
-        className={classes.input}
-        disabled
-        inputProps={{
-          'aria-label': 'Description',
-        }}
-      />
-
-      <Input
-        defaultValue="Error"
-        className={classes.input}
-        error
-        inputProps={{
-          'aria-label': 'Description',
-        }}
-      /> */}
     </div>
   );
 }

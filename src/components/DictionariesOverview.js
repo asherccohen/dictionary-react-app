@@ -73,7 +73,7 @@ function DictionariesOverview(props) {
                   {row.name}
                 </CustomTableCell>
                 <CustomTableCell align="center">
-                  {row.validated ? (
+                  {row.validation ? (
                     <Icon className={classes.rightIcon}>check</Icon>
                   ) : (
                     <Icon className={classes.rightIcon}>close</Icon>

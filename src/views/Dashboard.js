@@ -17,6 +17,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import Tooltip from '@material-ui/core/Tooltip';
 import { mainListItems, secondaryListItems } from '../components/listItems';
 import DictionariesOverview from '../components/DictionariesOverview';
 import DeleteDialog from '../components/DeleteDialog';
@@ -101,14 +102,7 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 2,
   },
   add: {
-    // display: 'flex',
-    // alignItems: 'flex-end',
-    // justifyItems: 'flex-end',
-    // justifyContent: 'flex-end',
-    // marginBottom: theme.spacing.unit * 2,
     position: 'absolute',
-    // marginBottom: 50,
-    // marginRight: 50,
     right: 50,
     bottom: 50,
   },
@@ -121,7 +115,7 @@ const dictionaries = require('../assets/data/dictionaries.json');
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    // Don't call this.setState() here!
+
     this.state = {
       open: true,
       openDeleteDialog: false,
@@ -147,14 +141,12 @@ class Dashboard extends React.Component {
     if (localStorage.getItem('dictionaries')) {
       try {
         rows = JSON.parse(localStorage.getItem('dictionaries'));
-        // console.log('Found localstorage!', rows);
       } catch (e) {
         // if error empty localStorage
         localStorage.removeItem('dictionaries');
       }
     } else {
       // console.log('No data in localStorage');
-      // console.log('dictionaries', dictionaries);
       rows = dictionaries;
       localStorage.setItem('dictionaries', JSON.stringify(rows));
     }
@@ -204,10 +196,6 @@ class Dashboard extends React.Component {
   handleChange(e) {
     this.setState({ dictionaryName: e.target.value });
   }
-
-  /*   handleClose(){
-    this.setState({ open: false });
-  }; */
 
   async addDictionary() {
     const { rows, dictionaryName } = this.state;
@@ -342,16 +330,10 @@ class Dashboard extends React.Component {
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
+          <List>{secondaryListItems(rows)}</List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          {/*           <Typography variant="h4" gutterBottom component="h2">
-            Orders
-          </Typography>
-          <Typography component="div" className={classes.chartContainer}>
-            <SimpleLineChart />
-          </Typography> */}
           <Typography variant="h4" gutterBottom component="h2">
             Dictionaries
           </Typography>
@@ -362,16 +344,18 @@ class Dashboard extends React.Component {
               editDictionary={this.handleEdit}
             />
           </div>
-          <div className={classes.add}>
-            <Fab
-              color="primary"
-              aria-label="Add"
-              className={classes.fab}
-              onClick={this.handleAddDialog}
-            >
-              <AddIcon />
-            </Fab>
-          </div>
+          <Tooltip title="Add dictionary" aria-label="Add dictionary">
+            <div className={classes.add}>
+              <Fab
+                color="primary"
+                aria-label="Add"
+                className={classes.fab}
+                onClick={this.handleAddDialog}
+              >
+                <AddIcon />
+              </Fab>
+            </div>
+          </Tooltip>
         </main>
       </div>
     );
