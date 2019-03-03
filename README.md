@@ -1,7 +1,13 @@
 # React Dictionary management App
 
-<img src="https://mildaintrainings.com/wp-content/uploads/2017/11/react-logo.png" height="50">
+Built with React and deployed on Heroku, through Circle CI.
 
+<img src="https://mildaintrainings.com/wp-content/uploads/2017/11/react-logo.png" height="100">
+<img src="https://cdn.worldvectorlogo.com/logos/heroku-1.svg" height="100">
+<img src="https://d3r49iyjzglexf.cloudfront.net/logo-wordmark-26f8eaea9b0f6e13b90d3f4a8fd8fda31490f5af41daab98bbede45037682576.svg" height="100">
+
+
+ 
 ## Build Setup
 
 ### `npm start`
@@ -25,6 +31,8 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
+### [Live Demo](https://dictionary-react.herokuapp.com/)
+
 ### Assignment
 Before start, you have to install production dependencies with npm: `npm install`.
 
@@ -40,7 +48,8 @@ Web Engineering Frontend Onsite Day Task Introduction
 
 `The Domain of a dictionary represents the original value to transform, the Range of a dictionary represents the desired value. If we apply this dictionary to the Color column of the Original Dataset and replace the values by the corresponding Range value in the dictionary, we get the Desired Dataset.`
 
-A dictionary is said to be consistent, if none of the following problems occur: Duplicate Domains/Ranges: Two rows in the dictionary map to the same value, simply resulting in duplicate content.
+A dictionary is said to be consistent, if none of the following problems occur: 
+`Duplicate Domains/Ranges: Two rows in the dictionary map to the same value, simply resulting in duplicate content.`
 
 `Forks or Duplicate Domains with different Ranges: Two rows in the dictionary map to different values, resulting in an ambiguous transformation.`
 
@@ -54,14 +63,12 @@ When using dictionaries for data normalisation or other purposes, all these inco
 With this introduction and slightly theoretical background in mind, you are now going to create a dictionary management application. 
 
 The application must satisfy the following requirements: 
-` - Creating and deleting dictionaries 
+- Creating and deleting dictionaries 
 - Showing available dictionaries in an overview 
 - Editing dictionaries (adding, updating and removing rows) 
 - Validating the entire dictionary regarding consistency (see above) 
 - Validations should be shown as some kind of problem markers next to the offending part of the dictionary. 
-- Problem markers have different severities, e.g. a Duplicate Domains/Ranges problem is less severe than a Cycle (in which case you cannot go on processing such a dictionary).`
-
-### [Live Demo](https://dictionary-react.herokuapp.com/)
+- Problem markers have different severities, e.g. a Duplicate Domains/Ranges problem is less severe than a Cycle (in which case you cannot go on processing such a dictionary).
 
 ## License
 
