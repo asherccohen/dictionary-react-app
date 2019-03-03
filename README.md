@@ -1,5 +1,20 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React Dictionary management App
 
+<img src="https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjPqIGH1ebgAhUMUBoKHUdnBqMQjRx6BAgBEAU&url=http%3A%2F%2Fwww.jsweet.org%2Fget-started-with-react-js-in-java%2Freact-logo%2F&psig=AOvVaw3OzL40yfHb0DJyI0zNyRU9&ust=1551726251298669" height="50">
+
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:3000
+npm start
+
+# test routes
+npm test
+
+```
 ## Available Scripts
 
 In the project directory, you can run:
@@ -25,44 +40,57 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 
+Before start, you have to install production dependencies with npm: `npm install`.
 
-### `npm run eject`
+Consider the following example of a small dataset representing products: Original Dataset:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Product Color Price Apple iPhone 6s Stonegrey CHF 769 Samsung Galaxy S8 Midnight Black CHF 569 Huawei P9 Mystic Silver CHF 272
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+E-commerce companies like online stores and market places however need the colours more standardised, so that they correspond to color ﬁlters and get properly picked up by the search engine. Each company has their own set of applicable colours and requires product data to be in a certain language.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Our customer ABC would like to have the products above look like this: Desired Dataset:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Product Color Price Apple iPhone 6s Dark Grey CHF 769 Samsung Galaxy S8 Black CHF 569 Huawei P9 Silver CHF 272
 
-## Learn More
+In order to transform the dataset into the desired format, a dictionary is needed:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Web Engineering Frontend Onsite Day Task Introduction
+Domain Range Stonegrey Dark Grey Midnight Black Black Mystic Silver Silver
+The Domain of a dictionary represents the original value to transform, the Range of a dictionary represents the desired value. If we apply this dictionary to the Color column of the Original Dataset and replace the values by the corresponding Range value in the dictionary, we get the Desired Dataset.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+A dictionary is said to be consistent, if none of the following problems occur: Duplicate Domains/Ranges: Two rows in the dictionary map to the same value, simply resulting in duplicate content.
 
-### Code Splitting
+Domain Range Stonegrey Dark Grey Stonegrey Dark Grey Caribbean Sea Turqoise
+Forks or Duplicate Domains with different Ranges: Two rows in the dictionary map to different values, resulting in an ambiguous transformation.
+Domain Range Stonegrey Dark Grey Stonegrey Anthracite Midnight Blue Dark Blue
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Cycles: Two or more rows in a dictionary result in cycles, resulting in a never-ending transformation.
+Dictionary Consistency
+Domain Range Stonegrey Dark Grey Dark Grey Stonegrey Midnight Blue Dark Blue
+Chains: A chain structure in the dictionary (a value in Range column also appears in Domain column of another entry), resulting in inconsistent transformation.
+Domain Range Stonegrey Dark Grey Dark Grey Anthracite Midnight Blue Dark Blue
 
-### Analyzing the Bundle Size
+When using dictionaries for data normalisation or other purposes, all these inconsistencies must not occur, otherwise the result of the transformation is ambiguous or not deﬁned.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+With this introduction and slightly theoretical background in mind, you are now going to create a dictionary management application. 
 
-### Making a Progressive Web App
+The application must satisfy the following requirements: 
+Creating and deleting dictionaries 
+Showing available dictionaries in an overview 
+Editing dictionaries (adding, updating and removing rows) 
+Validating the entire dictionary regarding consistency (see above) 
+Validations should be shown as some kind of problem markers next to the offending part of the dictionary. 
+Problem markers have different severities, e.g. a Duplicate Domains/Ranges problem is less severe than a Cycle (in which case you cannot go on processing such a dictionary).
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+### [Live Demo](https://dictionary-react.herokuapp.com/)
 
-### Advanced Configuration
+## License
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+This repo is available under the [MIT license](https://tldrlegal.com/license/mit-license).
 
-### Deployment
+## Contact
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+Copyright (C) 2016 Snake
 
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+[![@asherccohen](https://img.shields.io/badge/github-asherccohen-green.svg)](https://github.com/asherccohen) [![@asherccohen](https://img.shields.io/badge/twitter-iSnake_-blue.svg)](https://twitter.com/iSnake_)
