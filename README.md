@@ -1,23 +1,8 @@
 # React Dictionary management App
 
-<img src="https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjPqIGH1ebgAhUMUBoKHUdnBqMQjRx6BAgBEAU&url=http%3A%2F%2Fwww.jsweet.org%2Fget-started-with-react-js-in-java%2Freact-logo%2F&psig=AOvVaw3OzL40yfHb0DJyI0zNyRU9&ust=1551726251298669" height="50">
+<img src="https://mildaintrainings.com/wp-content/uploads/2017/11/react-logo.png" height="50">
 
 ## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:3000
-npm start
-
-# test routes
-npm test
-
-```
-## Available Scripts
-
-In the project directory, you can run:
 
 ### `npm start`
 
@@ -43,15 +28,11 @@ Your app is ready to be deployed!
 ### 
 Before start, you have to install production dependencies with npm: `npm install`.
 
-Consider the following example of a small dataset representing products: Original Dataset:
-
-Product Color Price Apple iPhone 6s Stonegrey CHF 769 Samsung Galaxy S8 Midnight Black CHF 569 Huawei P9 Mystic Silver CHF 272
+Consider the following example of a small dataset representing products: 
 
 E-commerce companies like online stores and market places however need the colours more standardised, so that they correspond to color ﬁlters and get properly picked up by the search engine. Each company has their own set of applicable colours and requires product data to be in a certain language.
 
-Our customer ABC would like to have the products above look like this: Desired Dataset:
-
-Product Color Price Apple iPhone 6s Dark Grey CHF 769 Samsung Galaxy S8 Black CHF 569 Huawei P9 Silver CHF 272
+Our customer ABC would like to have the products above look like this:
 
 In order to transform the dataset into the desired format, a dictionary is needed:
 
