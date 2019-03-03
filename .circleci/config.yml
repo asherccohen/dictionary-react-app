@@ -5,7 +5,8 @@ jobs:
       # - image: circleci/node:10.11
       - image: circleci/node:8
 
-    working_directory: ~/repo
+    # working_directory: ~/repo
+    working_directory: ./Projects/Dictionary/
 
     steps:
       - checkout
