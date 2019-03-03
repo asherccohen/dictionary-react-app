@@ -36,19 +36,16 @@ Your app is ready to be deployed!
 ### Assignment
 Before start, you have to install production dependencies with npm: `npm install`.
 
-Consider the following example of a small dataset representing products: 
+E-commerce companies like online stores and market places need datasets to be standardised, so that they correspond to ﬁlters and get properly picked up by the search engine. Each company has their own set of applicable values and requires product data to be in a certain language.
 
-E-commerce companies like online stores and market places however need the colours more standardised, so that they correspond to color ﬁlters and get properly picked up by the search engine. Each company has their own set of applicable colours and requires product data to be in a certain language.
-
-Our customer ABC would like to have the products above look like this:
-
-In order to transform the dataset into the desired format, a dictionary is needed:
+In order to transform the dataset into the desired format, a dictionary is needed.
 
 Web Engineering Frontend Onsite Day Task Introduction
 
 `The Domain of a dictionary represents the original value to transform, the Range of a dictionary represents the desired value. If we apply this dictionary to the Color column of the Original Dataset and replace the values by the corresponding Range value in the dictionary, we get the Desired Dataset.`
 
 A dictionary is said to be consistent, if none of the following problems occur: 
+
 `Duplicate Domains/Ranges: Two rows in the dictionary map to the same value, simply resulting in duplicate content.`
 
 `Forks or Duplicate Domains with different Ranges: Two rows in the dictionary map to different values, resulting in an ambiguous transformation.`
