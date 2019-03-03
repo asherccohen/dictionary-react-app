@@ -4,7 +4,7 @@ Built with React and deployed on Heroku, through Circle CI.
 
 <img src="https://mildaintrainings.com/wp-content/uploads/2017/11/react-logo.png" height="100">
 <img src="https://cdn.worldvectorlogo.com/logos/heroku-1.svg" height="100">
-<img src="https://d3r49iyjzglexf.cloudfront.net/logo-wordmark-26f8eaea9b0f6e13b90d3f4a8fd8fda31490f5af41daab98bbede45037682576.svg" height="100">
+<img src="https://s3.amazonaws.com/awsmp-logos/000logo-circleci.svg" height="100">
 
 
  
