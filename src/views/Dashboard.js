@@ -147,14 +147,14 @@ class Dashboard extends React.Component {
     if (localStorage.getItem('dictionaries')) {
       try {
         rows = JSON.parse(localStorage.getItem('dictionaries'));
-        console.log('Found localstorage!', rows);
+        // console.log('Found localstorage!', rows);
       } catch (e) {
         // if error empty localStorage
         localStorage.removeItem('dictionaries');
       }
     } else {
-      console.log('No data in localStorage');
-      console.log('dictionaries', dictionaries);
+      // console.log('No data in localStorage');
+      // console.log('dictionaries', dictionaries);
       rows = dictionaries;
       localStorage.setItem('dictionaries', JSON.stringify(rows));
     }

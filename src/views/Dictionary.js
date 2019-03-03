@@ -157,18 +157,18 @@ class Dictionary extends React.Component {
     if (localStorage.getItem('dictionaries')) {
       try {
         rows = JSON.parse(localStorage.getItem('dictionaries'));
-        console.log('Found localstorage!', rows);
+        // console.log('Found localstorage!', rows);
       } catch (e) {
         // if error empty localStorage
         localStorage.removeItem('dictionaries');
       }
     } else {
-      console.log('No data in localStorage');
+      // console.log('No data in localStorage');
     }
 
     const dictionary = rows.find(row => row._id === id);
     const { synonims } = dictionary;
-    console.log('Found dictionary!', dictionary);
+    // console.log('Found dictionary!', dictionary);
     this.setState({ rows, synonims, _id: id, dictionaryName: dictionary.name });
   }
 
@@ -221,10 +221,10 @@ class Dictionary extends React.Component {
 
   keyPress(e) {
     if (e.keyCode === 13 && e.target.value) {
-      console.log('value', e.target.value);
+      // console.log('value', e.target.value);
       this.addSynonim();
     } else if (e.keyCode === 9) {
-      console.log('value', e.target.value);
+      // console.log('value', e.target.value);
     }
   }
 
@@ -247,10 +247,10 @@ class Dictionary extends React.Component {
         };
       return dictionary;
     });
-    console.log('updated', updated);
+    // console.log('updated', updated);
 
     await this.setState({ rows: updated });
-    console.log('Saving!', this.state);
+    // console.log('Saving!', this.state);
     await localStorage.removeItem('dictionaries');
     await localStorage.setItem('dictionaries', JSON.stringify(this.state.rows));
   }
@@ -263,7 +263,7 @@ class Dictionary extends React.Component {
     this.setState({ isEditingItem: found });
   } */
   handleValidate() {
-    console.log('Validating..', this.state.synonims);
+    // console.log('Validating..', this.state.synonims);
     // Duplicate Domains / Ranges: Two rows in the dictionary map to the same value, simply resulting in duplicate content.
     // Forks or Duplicate Domains with different Ranges: Two rows in the dictionary map to different values, resulting in an ambiguous transformation.
     // Cycles: Two or more rows in a dictionary result in cycles, resulting in a never - ending transformation.
