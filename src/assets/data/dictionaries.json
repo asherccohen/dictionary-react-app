@@ -1,0 +1,63 @@
+[
+    {
+        "_id": "861d4be3-75f7-4879-83cc-50d897bdf43f",
+        "name": "Frozen yoghurts",
+        "validation": "true",
+        "synonims": [
+            {
+                "_id": "86187be3-75f7-4879-83db-50d897bdf43s",
+                "domain": "Stonegrey",
+                "range": "Dark Grey"
+
+            },
+            {
+                "_id": "86187be3-75f7-4879-83db-50d897bdf43q",
+                "domain": "Midnight Black",
+                "range": "White"
+            },
+            {
+                "_id": "86187be3-75f7-4879-83db-50d867bdf43s",
+                "domain": "Mystic Yellow",
+                "range": "Yellow"
+            }
+        ]
+    },
+    {
+        "_id": "86187be3-75f7-4879-83db-50d897bdf43f",
+        "name": "Cars",
+        "validation": "true",
+        "synonims": [
+            {
+                "domain": "Stonegrey",
+                "range": "Dark Grey"
+            },
+            {
+                "domain": "Midnight Black",
+                "range": "Black"
+            },
+            {
+                "domain": "Mystic Silver",
+                "range": "Silver"
+            }
+        ]
+    },
+    {
+        "_id": "861d4be3-75f7-4879-83db-50d897bdf49u",
+        "name": "Cupcakes",
+        "validation": "true",
+        "synonims": [
+            {
+                "domain": "Very green",
+                "range": "Dark Green"
+            },
+            {
+                "domain": "Midnight Bloom",
+                "range": "Black"
+            },
+            {
+                "domain": "Mystic River",
+                "range": "Silver"
+            }
+        ]
+    }
+]
