@@ -27,6 +27,6 @@ jobs:
       # run tests!
       - run: npm test
 
-      - run:
-          name: build and deploy
-          command: ./deploy.sh
+      #- run:
+          #name: build and deploy
+          # command: ./deploy.sh
