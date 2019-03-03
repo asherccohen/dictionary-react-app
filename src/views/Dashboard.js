@@ -18,9 +18,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { mainListItems, secondaryListItems } from '../components/listItems';
-/* import { mainListItems, secondaryListItems } from '../components/listItems'; */
-// import SimpleLineChart from '../components/SimpleLineChart';
-/* import SimpleTable from '../components/Table'; */
 import DictionariesOverview from '../components/DictionariesOverview';
 import DeleteDialog from '../components/DeleteDialog';
 import EditDialog from '../components/EditDialog';
