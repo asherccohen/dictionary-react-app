@@ -58,7 +58,6 @@
     "lint": "eslint ."
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/src/setupTests.js",
     "preset": "react",
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/react/jest/preprocessor.js"
