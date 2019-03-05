@@ -85,7 +85,6 @@ function DictionaryTable(props) {
                 <CustomTableCell component="th" scope="row">
                   <Input
                     id="domain"
-                    defaultValue={row.domain}
                     placeholder="Type a domain.."
                     className={classes.input}
                     inputProps={{
@@ -104,7 +103,6 @@ function DictionaryTable(props) {
                 <CustomTableCell align="center">
                   <Input
                     id="range"
-                    defaultValue={row.range}
                     placeholder="Type a range..."
                     className={classes.input}
                     inputProps={{
@@ -187,7 +185,6 @@ DictionaryTable.propTypes = {
   deleteRow: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   keyPress: PropTypes.func.isRequired,
-  saveChanges: PropTypes.func.isRequired,
   handleChangePage: PropTypes.func,
   handleChangeRowsPerPage: PropTypes.func,
   page: PropTypes.number.isRequired,

@@ -70,8 +70,11 @@ function DictionariesOverview(props) {
             rows.map(row => (
               <TableRow className={classes.row} key={row._id}>
                 <CustomTableCell component="th" scope="row">
-                  {row.name}
+                  <Link to={`/dictionary/${row._id}`} primary="Overview">
+                    {row.name}
+                  </Link>
                 </CustomTableCell>
+
                 <CustomTableCell align="center">
                   {row.validation ? (
                     <Icon className={classes.rightIcon}>check</Icon>

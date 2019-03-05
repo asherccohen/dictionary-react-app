@@ -1,6 +1,10 @@
 export const normilizeText = text => {
-  const normalized = text.replace(/[^\w\s]/gi, '').toLowerCase();
-  return normalized;
+  const normalized = text
+    .replace(/[^\w\s]/gi, '')
+    .toLowerCase()
+    .trim();
+  const joined = normalized.split(' ').join('');
+  return joined;
 };
 
 export const properCase = text => {
@@ -8,6 +12,16 @@ export const properCase = text => {
     return str.toUpperCase();
   }
   return text.toLowerCase().replace(/^\w|\s\w/g, upperCase);
+};
+
+export const concatTrimmed = text => {
+  const trimmed = properCase(text)
+    .split(' ')
+    .map(word => word.trim());
+  const noSpaces = trimmed.filter(el => el !== '');
+  const joined = noSpaces.join(' ');
+
+  return joined;
 };
 
 export const checkDuplicate = (array, property, string) => {

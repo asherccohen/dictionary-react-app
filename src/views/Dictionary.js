@@ -24,7 +24,11 @@ import DictionaryTable from '../components/DictionaryTable';
 import DeleteDialog from '../components/DeleteDialog';
 import ValidatedDialog from '../components/ValidatedDialog';
 import SaveDialog from '../components/SaveDialog';
-import { validateDictionary, properCase } from '../helpers/validationHelper';
+import {
+  validateDictionary,
+  concatTrimmed,
+  properCase,
+} from '../helpers/validationHelper';
 
 const drawerWidth = 240;
 
@@ -174,6 +178,29 @@ class Dictionary extends React.Component {
       dictionaryName: dictionary.name,
     });
     await this.handleValidate();
+
+    // add event listener to save state to localStorage
+    // when user leaves/refreshes the page
+    window.addEventListener(
+      'beforeunload',
+      this.constructor.saveStateToLocalStorage()
+    );
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener(
+      'beforeunload',
+      this.constructor.saveStateToLocalStorage()
+    );
+
+    // saves if component has a chance to unmount
+    this.constructor.saveStateToLocalStorage(this.state.rows);
+  }
+
+  static saveStateToLocalStorage(state) {
+    console.log('Saving...', state);
+    localStorage.removeItem('dictionaries');
+    localStorage.setItem('dictionaries', JSON.stringify(state));
   }
 
   static createData() {
@@ -235,21 +262,29 @@ class Dictionary extends React.Component {
 
   async handleSave() {
     const { rows, _id, synonims } = this.state;
-    this.handleValidate();
+    // this.handleValidate();
+
+    const noEmpty = synonims.filter(el => el.domain !== '' || el.range !== '');
+    const noSpaces = noEmpty.map(el => ({
+      ...el,
+      domain: concatTrimmed(el.domain),
+      range: concatTrimmed(el.range),
+    }));
+
     const updated = rows.map(dictionary => {
       if (dictionary._id === _id)
         return {
           ...dictionary,
-          synonims: [...synonims],
+          synonims: [...noSpaces],
           validation: true,
         };
       return dictionary;
     });
 
-    await this.setState({ rows: updated });
+    await this.setState({ rows: updated, synonims: [...noSpaces] });
 
-    await localStorage.removeItem('dictionaries');
-    await localStorage.setItem('dictionaries', JSON.stringify(this.state.rows));
+    await this.constructor.saveStateToLocalStorage(this.state.rows);
+    this.handleSaveDialog();
   }
 
   checkValidation(dictionary) {
@@ -281,7 +316,7 @@ class Dictionary extends React.Component {
     const dictionary = rows.find(row => row._id === _id);
 
     const rowsWithoutSelected = dictionary.synonims.filter(
-      synonim => synonim !== isEditingItem
+      synonim => synonim._id !== isEditingItem._id
     );
     const dictionaryWithoutSelected = {
       ...dictionary,
@@ -297,13 +332,12 @@ class Dictionary extends React.Component {
     await this.setState({
       rows: newRows,
       synonims: [...rowsWithoutSelected],
-      isEditingItem: null,
+      // isEditingItem: null,
       isEditingIndex: null,
     });
     this.handleDeleteDialog(null);
 
-    await localStorage.removeItem('dictionaries');
-    await localStorage.setItem('dictionaries', JSON.stringify(this.state.rows));
+    await this.constructor.saveStateToLocalStorage(this.state.rows);
   }
 
   handleChangePage(event, page) {
@@ -331,7 +365,7 @@ class Dictionary extends React.Component {
       <div className={classes.root}>
         <DeleteDialog
           open={openDeleteDialog}
-          handleClose={this.handleDeleteDialog}
+          handleClose={() => this.handleDeleteDialog(null)}
           handleDelete={this.handleDelete}
         />
         <ValidatedDialog
@@ -417,8 +451,6 @@ class Dictionary extends React.Component {
               <DictionaryTable
                 rows={synonims}
                 deleteRow={this.handleDeleteDialog}
-                saveChanges={this.handleSave}
-                validate={this.handleValidate}
                 editRow={this.handleEdit}
                 onChange={this.handleChange}
                 keyPress={this.keyPress}
