@@ -38,7 +38,6 @@ export const mainListItems = (
 
 export const secondaryListItems = rows => {
   const subset = rows ? rows.slice(0, 4) : null;
-  console.log('subset', subset);
 
   return (
     <div>
