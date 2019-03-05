@@ -36,25 +36,29 @@ export const mainListItems = (
   </div>
 );
 
-export const secondaryListItems = rows => (
-  <div>
-    <ListSubheader inset>Recent dictionaries</ListSubheader>
-    {rows &&
-      rows.length < 4 &&
-      rows.map(row => (
-        <Link
-          component={RouterLink}
-          to={{ pathname: `/dictionary/${row._id}` }}
-          primary="Overview"
-          key={row._id}
-        >
-          <ListItem button>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary={row.name} />
-          </ListItem>
-        </Link>
-      ))}
-  </div>
-);
+export const secondaryListItems = rows => {
+  const subset = rows ? rows.slice(0, 4) : null;
+  console.log('subset', subset);
+
+  return (
+    <div>
+      <ListSubheader inset>Recent dictionaries</ListSubheader>
+      {subset &&
+        subset.map(row => (
+          <Link
+            component={RouterLink}
+            to={{ pathname: `/dictionary/${row._id}` }}
+            primary="Overview"
+            key={row._id}
+          >
+            <ListItem button>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary={row.name} />
+            </ListItem>
+          </Link>
+        ))}
+    </div>
+  );
+};

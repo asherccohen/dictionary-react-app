@@ -28,6 +28,7 @@ import {
   validateDictionary,
   concatTrimmed,
   properCase,
+  checkValidation,
 } from '../helpers/validationHelper';
 
 const drawerWidth = 240;
@@ -132,6 +133,7 @@ class Dictionary extends React.Component {
       _id: null,
       page: 0,
       rowsPerPage: 5,
+      validated: null,
     };
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
@@ -143,7 +145,6 @@ class Dictionary extends React.Component {
     this.handleValidatedDialog = this.handleValidatedDialog.bind(this);
     this.handleSaveDialog = this.handleSaveDialog.bind(this);
     this.handleSave = this.handleSave.bind(this);
-    this.checkValidation = this.checkValidation.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChangePage = this.handleChangePage.bind(this);
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
@@ -254,15 +255,14 @@ class Dictionary extends React.Component {
     }
   }
 
-  async addSynonim() {
+  async addSynonim(validated) {
     const { synonims } = this.state;
     synonims.push(this.constructor.createData());
-    await this.setState({ synonims });
+    await this.setState({ synonims, validated });
   }
 
   async handleSave() {
-    const { rows, _id, synonims } = this.state;
-    // this.handleValidate();
+    const { rows, _id, synonims, validated } = this.state;
 
     const noEmpty = synonims.filter(el => el.domain !== '' || el.range !== '');
     const noSpaces = noEmpty.map(el => ({
@@ -276,7 +276,7 @@ class Dictionary extends React.Component {
         return {
           ...dictionary,
           synonims: [...noSpaces],
-          validation: true,
+          validation: validated,
         };
       return dictionary;
     });
@@ -287,56 +287,30 @@ class Dictionary extends React.Component {
     this.handleSaveDialog();
   }
 
-  checkValidation(dictionary) {
-    const validate = dictionary.filter(el => {
-      const { isDuplicate, isFork, isCycle, isChain, domain, range } = el;
-      if (isDuplicate || isFork || isCycle || isChain || !domain || !range)
-        return true;
-      return false;
-    });
-    if (validate.length === 0) {
-      this.addSynonim();
-    } else {
-      this.handleValidatedDialog();
-    }
-  }
-
   async handleValidate() {
     const { synonims } = this.state;
     const validatedDictionary = validateDictionary(synonims);
     // setState is async so we need to wait until the values are populated
     await this.setState({ synonims: validatedDictionary });
 
-    await this.checkValidation(this.state.synonims);
+    await checkValidation(
+      this.state.synonims,
+      this.addSynonim,
+      this.handleValidatedDialog
+    );
   }
 
   async handleDelete() {
-    const { rows, isEditingItem, _id } = this.state;
-
-    const dictionary = rows.find(row => row._id === _id);
-
-    const rowsWithoutSelected = dictionary.synonims.filter(
+    const { synonims, isEditingItem } = this.state;
+    const rowsWithoutSelected = synonims.filter(
       synonim => synonim._id !== isEditingItem._id
     );
-    const dictionaryWithoutSelected = {
-      ...dictionary,
-      synonims: [...rowsWithoutSelected],
-    };
-    const rowsWithoutSelectedDictionary = rows.filter(row => row._id !== _id);
-
-    const newRows = [
-      ...rowsWithoutSelectedDictionary,
-      dictionaryWithoutSelected,
-    ];
-
     await this.setState({
-      rows: newRows,
       synonims: [...rowsWithoutSelected],
-      // isEditingItem: null,
       isEditingIndex: null,
     });
     this.handleDeleteDialog(null);
-
+    await this.handleSave();
     await this.constructor.saveStateToLocalStorage(this.state.rows);
   }
 

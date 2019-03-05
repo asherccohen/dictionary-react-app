@@ -200,7 +200,7 @@ class Dashboard extends React.Component {
   async addDictionary() {
     const { rows, dictionaryName } = this.state;
     rows.push(this.constructor.createData(dictionaryName, null));
-    await this.setState({ ...rows });
+    await this.setState({ rows });
     await localStorage.removeItem('dictionaries');
     await localStorage.setItem('dictionaries', JSON.stringify(this.state.rows));
     this.handleAddDialog();
@@ -209,7 +209,7 @@ class Dashboard extends React.Component {
   async handleSave() {
     const { rows, isEditingItem, dictionaryName } = this.state;
     const updated = rows.map(el => {
-      if (el.id === isEditingItem.id)
+      if (el._id === isEditingItem._id)
         return {
           ...el,
           name: dictionaryName,

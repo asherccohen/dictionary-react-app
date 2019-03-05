@@ -52,7 +52,7 @@ const styles = theme => ({
 });
 
 function DictionariesOverview(props) {
-  const { classes, rows, deleteDictionary } = props;
+  const { classes, rows, deleteDictionary, editDictionary } = props;
 
   return (
     <Paper className={classes.root}>
@@ -87,8 +87,7 @@ function DictionariesOverview(props) {
                     variant="contained"
                     color="primary"
                     className={classes.button}
-                    component={Link}
-                    to={{ pathname: `/dictionary/${row._id}` }}
+                    onClick={() => editDictionary(row._id)}
                   >
                     Edit
                     <Icon className={classes.rightIcon}>edit_icon</Icon>
@@ -117,6 +116,7 @@ DictionariesOverview.propTypes = {
   classes: PropTypes.object.isRequired,
   rows: PropTypes.array,
   deleteDictionary: PropTypes.func.isRequired,
+  editDictionary: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(DictionariesOverview);

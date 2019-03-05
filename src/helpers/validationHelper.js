@@ -36,6 +36,24 @@ export const checkCycle = (array, property, domain) => {
   );
   return isCycle;
 };
+export const checkValidation = (
+  dictionary,
+  addSynonim,
+  handleValidatedDialog
+) => {
+  const validate = dictionary.filter(el => {
+    const { isDuplicate, isFork, isCycle, isChain, domain, range } = el;
+    if (isDuplicate || isFork || isCycle || isChain || !domain || !range)
+      return true;
+    return false;
+  });
+  if (validate.length === 0) {
+    addSynonim(true);
+  } else {
+    handleValidatedDialog();
+    addSynonim(false);
+  }
+};
 
 export function validateDictionary(synonims) {
   // Duplicate Domains / Ranges: Two rows in the dictionary map to the same value, simply resulting in duplicate content.
