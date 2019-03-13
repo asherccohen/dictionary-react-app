@@ -117,12 +117,14 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
 });
+const dictionaries = require('../assets/data/dictionaries.json');
 
 class Dictionary extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      dictionaries,
       open: true,
       openDeleteDialog: false,
       openValidatedDialog: false,
@@ -156,17 +158,22 @@ class Dictionary extends React.Component {
         params: { id },
       },
     } = this.props;
+
     let rows = [];
     if (localStorage.getItem('dictionaries')) {
       try {
-        rows = JSON.parse(localStorage.getItem('dictionaries'));
+        rows = await JSON.parse(localStorage.getItem('dictionaries'));
         // console.log('Found localstorage!', rows);
       } catch (e) {
-        // if error empty localStorage
+        // if error empty localStorage we refresh page which collect data from localStorage again
+
         localStorage.removeItem('dictionaries');
+        window.location.reload();
       }
     } else {
-      console.log('No data in localStorage');
+      // console.log('No data in localStorage');
+      rows = this.state.dictionaries;
+      localStorage.setItem('dictionaries', JSON.stringify(rows));
     }
 
     const dictionary = rows.find(row => row._id === id);
@@ -199,7 +206,7 @@ class Dictionary extends React.Component {
   }
 
   static saveStateToLocalStorage(state) {
-    console.log('Saving...', state);
+    // console.log('Saving...', state);
     localStorage.removeItem('dictionaries');
     localStorage.setItem('dictionaries', JSON.stringify(state));
   }

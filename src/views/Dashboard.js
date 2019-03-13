@@ -138,12 +138,14 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     let rows = [];
+
     if (localStorage.getItem('dictionaries')) {
       try {
         rows = JSON.parse(localStorage.getItem('dictionaries'));
       } catch (e) {
-        // if error empty localStorage
+        // if error empty localStorage we refresh page which collect data from localStorage again
         localStorage.removeItem('dictionaries');
+        window.location.reload();
       }
     } else {
       // console.log('No data in localStorage');
